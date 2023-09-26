@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using bizpay_api.Data;
-using bizpay_api.Models;
 using System.Text.Json;
+using bizpay_api.Models;
+using bizpay_api.Repository;
 
 namespace bizpay_api.Controllers
 {
@@ -22,7 +23,7 @@ namespace bizpay_api.Controllers
             _context = context;
         }
 
-        // GET: api/employee
+        /*// GET: api/employee
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
@@ -83,13 +84,36 @@ namespace bizpay_api.Controllers
         }
 
         // POST: api/employee
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> PostEmployee(Employee employee)
+        public async Task<ActionResult> CreateOrUpdateEmployee(EmployeeDTO employee)
         {
+
             if (ModelState.IsValid)
             {
-                //verifica se as condicoes da model "required e validate" estao sendo atendidas
+
+                if (_context.Employees == null)
+                {
+                    return Problem("Contexto do banco inválido!");
+                }
+
+                Employee dbEmployee = new Employee() { Id = Guid.NewGuid() };
+
+                if (employee.Id != Guid.Empty)
+                {
+                    dbEmployee = await _context.Employees.FindAsync(employee.Id);
+                }
+
+                dbEmployee.FromDTO(employee);
+
+                if (employee.Id == Guid.Empty)
+                {
+                    _context.Employees.Add(dbEmployee);
+                } else
+                {
+                    _context.Employees.Update(dbEmployee);
+                }
+
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -102,39 +126,18 @@ namespace bizpay_api.Controllers
                     });
             }
 
-            if (_context.Employees == null)
-            {
-                return Problem("Entity set 'APIDbContext.Employees'  is null.");
-            }
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
+            return new JsonResult(
+                    new
+                    {
+                        StatusCode = (int)System.Net.HttpStatusCode.OK,
+                        Value = new StringContent(JsonSerializer.Serialize(new { message = "Funcionario criado com sucesso!" })),
+                    });
         }
 
-        // DELETE: api/employee/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(Guid id)
-        {
-            if (_context.Employees == null)
-            {
-                return NotFound();
-            }
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
 
         private bool EmployeeExists(Guid id)
         {
             return (_context.Employees?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        }*/
     }
 }

@@ -11,8 +11,8 @@ using bizpay_api.Data;
 namespace bizpay_api.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20230914212849_inicial")]
-    partial class inicial
+    [Migration("20230926225439_alter table name")]
+    partial class altertablename
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace bizpay_api.Migrations
                 .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("bizpay_api.Models.Employee", b =>
+            modelBuilder.Entity("bizpay_api.Repository.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,12 +30,11 @@ namespace bizpay_api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Departments");
                 });
 #pragma warning restore 612, 618
         }

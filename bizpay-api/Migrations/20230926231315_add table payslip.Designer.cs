@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bizpay_api.Data;
 
@@ -10,9 +11,11 @@ using bizpay_api.Data;
 namespace bizpay_api.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    partial class APIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230926231315_add table payslip")]
+    partial class addtablepayslip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,8 +39,9 @@ namespace bizpay_api.Migrations
 
             modelBuilder.Entity("bizpay_api.Repository.Employee", b =>
                 {
-                    b.Property<string>("Cpf")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -60,21 +64,7 @@ namespace bizpay_api.Migrations
                     b.Property<decimal>("HourlyPayment")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("MaritalStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nationality")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("NumberOfChildren")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PartnerName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -86,14 +76,6 @@ namespace bizpay_api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Religion")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Rg")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -109,7 +91,7 @@ namespace bizpay_api.Migrations
                     b.Property<DateTime>("TerminationDate")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Cpf");
+                    b.HasKey("Id");
 
                     b.HasIndex("PermitionId");
 
@@ -133,9 +115,8 @@ namespace bizpay_api.Migrations
                     b.Property<decimal>("Discounts")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<string>("EmployeeCpf")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("GrossSalary")
                         .HasColumnType("decimal(65,30)");
@@ -151,7 +132,7 @@ namespace bizpay_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeCpf");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Payslips");
                 });
@@ -217,7 +198,7 @@ namespace bizpay_api.Migrations
                 {
                     b.HasOne("bizpay_api.Repository.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeCpf")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
