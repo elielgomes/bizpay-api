@@ -46,6 +46,14 @@ namespace bizpay_api.Repository
 
         public string PartnerName { get; set; }
 
+        public string BankName { get; set; }
+
+        public string AccountNumber { get; set; }
+
+        public string AgencyNumber { get; set; }
+
+        public string PixKey { get; set; }
+
         [ForeignKey(nameof(Permition))]
         public EmployeePermitions PermitionId { get; set; }
 
@@ -81,6 +89,10 @@ namespace bizpay_api.Repository
                 Status  = Status,
                 PermitionId = PermitionId,
                 RoleId = RoleId,
+                BankName = BankName,
+                AccountNumber = AccountNumber,
+                AgencyNumber = AgencyNumber,
+                PixKey = PixKey
                
             };
 
@@ -110,6 +122,10 @@ namespace bizpay_api.Repository
                 Status = employeeDTO.Status;
                 PermitionId = employeeDTO.PermitionId;
                 RoleId = employeeDTO.RoleId;
+                BankName = employeeDTO.BankName;
+                AccountNumber = employeeDTO.AccountNumber;
+                AgencyNumber = employeeDTO.AgencyNumber;
+                PixKey = employeeDTO.PixKey;
 
             return this;
         }

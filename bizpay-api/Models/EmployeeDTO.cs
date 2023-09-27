@@ -54,6 +54,14 @@ namespace bizpay_api.Models
 
         public string PartnerName { get; set; }
 
+        public string BankName { get; set; }
+
+        public string AccountNumber { get; set; }
+
+        public string AgencyNumber { get; set; }
+
+        public string PixKey { get; set; }
+
         public EmployeePermitions PermitionId { get; set; }
 
         public Guid RoleId { get; set; }
