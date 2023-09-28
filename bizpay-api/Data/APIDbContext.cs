@@ -5,9 +5,7 @@ namespace bizpay_api.Data
 {
     public class APIDbContext : DbContext
     {
-        public APIDbContext(DbContextOptions<APIDbContext> options) : base(options) {
-        
-        }
+        public APIDbContext(DbContextOptions<APIDbContext> options) : base(options) { }
 
         public DbSet<Department> Departments { get; set; }
 
@@ -18,5 +16,6 @@ namespace bizpay_api.Data
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Payslip> Payslips { get; set; }
+
     }
 }

@@ -40,7 +40,7 @@ namespace bizpay_api.Models
 
         public DateTime AdmissionDate { get; set; }
 
-        public DateTime TerminationDate { get; set; }
+        public DateTime? TerminationDate { get; set; }
 
         public string Rg { get; set; }
 
@@ -52,7 +52,7 @@ namespace bizpay_api.Models
 
         public int NumberOfChildren { get; set; }
 
-        public string PartnerName { get; set; }
+        public string? PartnerName { get; set; }
 
         public string BankName { get; set; }
 

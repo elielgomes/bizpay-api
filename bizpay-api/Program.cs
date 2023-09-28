@@ -14,6 +14,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Inicialize Seeder
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<APIDbContext>();
+    context.Database.Migrate(); // Certifique-se de que o banco de dados esteja criado ou atualizado
+    Seeder.SeedData(context); // Execute o seeder para popular os dados
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -9,7 +9,7 @@ namespace bizpay_api.Repository
         [Key]
         public EmployeePermitions Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name => Id == EmployeePermitions.Admin ? "Admin" : "User";
 
     }
 }

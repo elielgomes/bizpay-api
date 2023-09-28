@@ -10,7 +10,7 @@ namespace bizpay_api.Repository
 
         public string Name { get; set; }
 
-        public string WeeklyWorkload { get; set; }
+        public decimal WeeklyWorkload { get; set; }
 
         [ForeignKey(nameof(Department))]
         public Guid DepartamentId { get; set; }
