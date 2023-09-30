@@ -24,7 +24,7 @@ namespace bizpay_api.Controllers
 
         // GET: api/employee
         [HttpGet]
-        [Route("api/employees")]
+        [Route("api/employee")]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
         {
             if (_dbContext.Employees == null)

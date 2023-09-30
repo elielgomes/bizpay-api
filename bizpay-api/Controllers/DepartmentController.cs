@@ -20,9 +20,9 @@ namespace bizpay_api.Controllers
 
         }
 
-        // GET: api/departments
+        // GET: api/department
         [HttpGet]
-        [Route("/api/departments")]
+        [Route("/api/department")]
         public async Task<ActionResult<IEnumerable<Department>>> GetAllDepartments()
         {
             if (_dbContext.Departments == null)
@@ -83,7 +83,7 @@ namespace bizpay_api.Controllers
             }
         }
 
-        // POST: api/employee
+        // POST: api/department
         [HttpPost]
         [Route("/api/department")]
         public async Task<ActionResult> CreateDepartment(DepartmentDTO department)
@@ -98,7 +98,7 @@ namespace bizpay_api.Controllers
                 try
                 {
 
-                    if (!DepartmentExists(department.Id))
+                    if (!DepartmentExists(department.Id, department.Name))
                     {
                         Department newDepartment = new Department();
                         newDepartment.FromDTO(department);
@@ -127,7 +127,7 @@ namespace bizpay_api.Controllers
             return Ok(new { message = "Departamento criado com sucesso!" });
         }
 
-        // PATCH: api/employee
+        // PATCH: api/department
         [HttpPatch]
         [Route("/api/department")]
         public async Task<ActionResult> UpdateDepartment(DepartmentDTO department)
@@ -141,7 +141,7 @@ namespace bizpay_api.Controllers
             try
             {
 
-                if (DepartmentExists(department.Id))
+                if (DepartmentExists(department.Id, department.Name))
                 {
                     if (!String.IsNullOrEmpty(department.Id.ToString()))
                     {
@@ -171,7 +171,7 @@ namespace bizpay_api.Controllers
 
         }
 
-        // DELETE: api/employee
+        // DELETE: api/department
         [HttpDelete]
         [Route("/api/department/{id}")]
         public async Task<ActionResult> DeleteDepartment(Guid id)
@@ -205,9 +205,9 @@ namespace bizpay_api.Controllers
 
         }
 
-        private bool DepartmentExists(Guid id)
+        private bool DepartmentExists(Guid id, string name)
         {
-            return (_dbContext.Departments?.Any(d => d.Id == id)).GetValueOrDefault();
+            return (_dbContext.Departments?.Any(d => d.Id == id || d.Name == name)).GetValueOrDefault();
         }
 
     }
