@@ -12,132 +12,169 @@ using bizpay_api.Repository;
 
 namespace bizpay_api.Controllers
 {
-    [Route("api/employee")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly APIDbContext _context;
+        private readonly APIDbContext _dbContext;
 
         public EmployeeController(APIDbContext context)
         {
-            _context = context;
+            _dbContext = context;
         }
 
-        /*// GET: api/employee
+        // GET: api/employee
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
+        [Route("api/employees")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
         {
-            if (_context.Employees == null)
+            if (_dbContext.Employees == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Contexto de banco dados inválido!" });
             }
-            return await _context.Employees.ToListAsync();
-        }
-
-        // GET: api/employee/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployee(Guid id)
-        {
-            if (_context.Employees == null)
-            {
-                return NotFound();
-            }
-            var employee = await _context.Employees.FindAsync(id);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return employee;
-        }
-
-        // PUT: api/employee/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(Guid id, Employee employee)
-        {
-            if (id != employee.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(employee).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(id))
+                var employeeList = await _dbContext.Employees.ToListAsync();
+
+                if (employeeList.Any())
                 {
-                    return NotFound();
+                    return employeeList;
                 }
                 else
                 {
-                    throw;
+                    return StatusCode(404, "Lista de funcionários vazia!");
                 }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
+
+        // GET: api/employee/{cpf}
+        [HttpGet]
+        [Route("api/employee/{cpf}")]
+        public async Task<ActionResult<Employee>> GetEmployeeByCpf(string cpf)
+        {
+            if (_dbContext.Employees == null)
+            {
+                return NotFound(new { message = "Contexto de banco dados inválido!" });
             }
 
-            return NoContent();
+            if (String.IsNullOrEmpty(cpf))
+            {
+                return StatusCode(400, "Informe dos dados corretamente!");
+            }
+
+            try
+            {
+                var employee = await _dbContext.Employees.FindAsync(cpf);
+
+                if (employee == null)
+                {
+                    return NotFound("Funcionário inválido!");
+                }
+
+                return employee;
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
         // POST: api/employee
         [HttpPost]
-        public async Task<ActionResult> CreateOrUpdateEmployee(EmployeeDTO employee)
+        [Route("api/employee")]
+        public async Task<ActionResult> CreateEmployee(EmployeeDTO employee)
         {
-
             if (ModelState.IsValid)
             {
-
-                if (_context.Employees == null)
+                if (_dbContext.Employees == null)
                 {
-                    return Problem("Contexto do banco inválido!");
+                    return NotFound(new { message = "Contexto de banco dados inválido!" });
+                };
+
+                try
+                {
+
+                    if (!EmployeeExists(employee.Cpf))
+                    {
+                        Employee newEmployee = new Employee();
+                        newEmployee.FromDTO(employee);
+                        await _dbContext.Employees.AddAsync(newEmployee);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return Conflict(new { message = "O registro do funcionário já existe no banco de dados!" });
+                    };
+
                 }
-
-                Employee dbEmployee = new Employee() { Id = Guid.NewGuid() };
-
-                if (employee.Id != Guid.Empty)
+                catch (Exception ex)
                 {
-                    dbEmployee = await _context.Employees.FindAsync(employee.Id);
+                    return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
                 }
-
-                dbEmployee.FromDTO(employee);
-
-                if (employee.Id == Guid.Empty)
-                {
-                    _context.Employees.Add(dbEmployee);
-                } else
-                {
-                    _context.Employees.Update(dbEmployee);
-                }
-
-                await _context.SaveChangesAsync();
             }
             else
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                return new JsonResult(
-                    new
-                    {
-                        StatusCode = (int)System.Net.HttpStatusCode.BadRequest,
-                        Value = new StringContent(JsonSerializer.Serialize(errorMessages)),
-                    });
+
+                return StatusCode(400, new StringContent(JsonSerializer.Serialize(errorMessages)));
+
             }
 
-            return new JsonResult(
-                    new
-                    {
-                        StatusCode = (int)System.Net.HttpStatusCode.OK,
-                        Value = new StringContent(JsonSerializer.Serialize(new { message = "Funcionario criado com sucesso!" })),
-                    });
+            return Ok(new { message = "Funcionário criado com sucesso!" });
         }
 
-
-        private bool EmployeeExists(Guid id)
+        // PATCH: api/employee
+        [HttpPatch]
+        [Route("api/employee")]
+        public async Task<ActionResult> UpdateEmployee(EmployeeDTO employee)
         {
-            return (_context.Employees?.Any(e => e.Id == id)).GetValueOrDefault();
-        }*/
+
+            if (_dbContext.Employees == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+
+                if (EmployeeExists(employee.Cpf))
+                {
+                    if (!String.IsNullOrEmpty(employee.Cpf))
+                    {
+
+                        Employee updatedEmployee = new Employee();
+                        updatedEmployee.FromDTO(employee);
+                        _dbContext.Employees.Update(updatedEmployee);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "Houve um problema na requisição, favor informe os dados corretamente!" });
+                    }
+                }
+                else
+                {
+                    return NotFound(new { message = "O funciónário que você esta tentando atualizar não existe!" });
+                }
+
+                return Ok(new { message = "Funcionário atualizado com sucesso!" });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+
+        }
+
+        private bool EmployeeExists(string Cpf)
+        {
+            return (_dbContext.Employees?.Any(e => e.Cpf == Cpf)).GetValueOrDefault();
+        }
     }
 }

@@ -19,8 +19,8 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<APIDbContext>();
-    context.Database.Migrate(); // Certifique-se de que o banco de dados esteja criado ou atualizado
-    Seeder.SeedData(context); // Execute o seeder para popular os dados
+    context.Database.Migrate();
+    Seeder.SeedData(context);
 }
 
 // Configure the HTTP request pipeline.

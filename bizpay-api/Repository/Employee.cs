@@ -38,7 +38,7 @@ namespace bizpay_api.Repository
 
         public string Nationality { get; set;}
 
-        public string Religion { get; set;}
+        public string? Religion { get; set;}
 
         public MaritalStatus MaritalStatus { get; set; }
 
@@ -46,13 +46,13 @@ namespace bizpay_api.Repository
 
         public string? PartnerName { get; set; }
 
-        public string BankName { get; set; }
+        public string? BankName { get; set; }
 
-        public string AccountNumber { get; set; }
+        public string? AccountNumber { get; set; }
 
-        public string AgencyNumber { get; set; }
+        public string? AgencyNumber { get; set; }
 
-        public string PixKey { get; set; }
+        public string? PixKey { get; set; }
 
         [ForeignKey(nameof(Permition))]
         public EmployeePermitions PermitionId { get; set; }
@@ -86,7 +86,6 @@ namespace bizpay_api.Repository
                 PartnerName = PartnerName,
                 Religion = Religion,
                 Rg = Rg,
-                Status  = Status,
                 PermitionId = PermitionId,
                 RoleId = RoleId,
                 BankName = BankName,
@@ -119,7 +118,6 @@ namespace bizpay_api.Repository
                 PartnerName = employeeDTO.PartnerName;
                 Religion = employeeDTO.Religion;
                 Rg = employeeDTO.Rg;
-                Status = employeeDTO.Status;
                 PermitionId = employeeDTO.PermitionId;
                 RoleId = employeeDTO.RoleId;
                 BankName = employeeDTO.BankName;
