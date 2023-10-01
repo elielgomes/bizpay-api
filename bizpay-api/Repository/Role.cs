@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using bizpay_api.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace bizpay_api.Repository
@@ -16,5 +17,28 @@ namespace bizpay_api.Repository
         public Guid DepartamentId { get; set; }
 
         public Department Department { get; set; }
+
+        public RoleDTO ToDTO()
+        {
+            var roleDTO = new RoleDTO
+            {
+                Id = Id,
+                DepartamentId = DepartamentId,
+                WeeklyWorkload = WeeklyWorkload,
+                Name = Name
+            };
+
+            return roleDTO;
+        }
+
+        public Role FromDTO(RoleDTO roleDTO)
+        {
+            Id = roleDTO.Id;
+            Name = roleDTO.Name;
+            WeeklyWorkload = roleDTO.WeeklyWorkload;
+            DepartamentId = roleDTO.DepartamentId;
+
+            return this;
+        }
     }
 }

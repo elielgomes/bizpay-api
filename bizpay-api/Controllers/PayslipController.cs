@@ -20,7 +20,7 @@ namespace bizpay_api.Controllers
 
         // GET: api/payslip/{cpf}
         [HttpGet]
-        [Route("api/payslip/{cpf}")]
+        [Route("api/payslip/cpf/{cpf}")]
         public async Task<ActionResult<IEnumerable<Payslip>>> GetAllEmployeePayslipsByCpf(string cpf)
         {
             if (_dbContext.Payslips == null)
@@ -65,7 +65,7 @@ namespace bizpay_api.Controllers
 
         // GET: api/payslip/{id}
         [HttpGet]
-        [Route("api/payslip/{id}")]
+        [Route("api/payslip/id/{id}")]
         public async Task<ActionResult<Payslip>> GetPayslipById(Guid id)
         {
             if (_dbContext.Payslips == null)
@@ -120,6 +120,8 @@ namespace bizpay_api.Controllers
                         {
                             Payslip newPayslip = new Payslip();
                             newPayslip.FromDTO(payslip);
+                            newPayslip.SalaryCalculation();
+
                             await _dbContext.Payslips.AddAsync(newPayslip);
                             await _dbContext.SaveChangesAsync();
                         } else
@@ -166,6 +168,8 @@ namespace bizpay_api.Controllers
                    
                     Payslip updatedPayslip = new Payslip();
                     updatedPayslip.FromDTO(payslip);
+                    updatedPayslip.SalaryCalculation();
+
                     _dbContext.Payslips.Update(updatedPayslip);
                     await _dbContext.SaveChangesAsync();
                 }
