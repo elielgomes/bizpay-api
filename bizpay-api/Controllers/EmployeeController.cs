@@ -34,7 +34,11 @@ namespace bizpay_api.Controllers
 
             try
             {
-                var employeeList = await _dbContext.Employees.ToListAsync();
+                var employeeList = await _dbContext.Employees
+                    .Include(p => p.Permition)
+                    .Include(r => r.Role)
+                    .ThenInclude(d => d.Department)
+                    .ToListAsync();
 
                 if (employeeList.Any())
                 {
@@ -69,7 +73,12 @@ namespace bizpay_api.Controllers
 
             try
             {
-                var employee = await _dbContext.Employees.FindAsync(cpf);
+                var employee = await _dbContext.Employees
+                    .Include(p => p.Permition)
+                    .Include(r => r.Role)
+                    .ThenInclude(d => d.Department)
+                    .FirstOrDefaultAsync(e => e.Cpf == cpf);
+                    
 
                 if (employee == null)
                 {

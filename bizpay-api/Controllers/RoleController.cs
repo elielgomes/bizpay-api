@@ -29,7 +29,7 @@ namespace bizpay_api.Controllers
 
             try
             {
-                var roleList = await _dbContext.Roles.ToListAsync();
+                var roleList = await _dbContext.Roles.Include(d => d.Department).ToListAsync();
                 if (roleList.Any())
                 {
                     return roleList;
@@ -64,7 +64,7 @@ namespace bizpay_api.Controllers
 
             try
             {
-                var role = await _dbContext.Roles.FindAsync(id);
+                var role = await _dbContext.Roles.Include(d => d.Department).FirstOrDefaultAsync(r => r.Id == id);
 
                 if (role == null)
                 {
@@ -83,23 +83,26 @@ namespace bizpay_api.Controllers
         // GET: api/role/department/{departmentId}
         [HttpGet]
         [Route("api/role/department/{departmentId}")]
-        public async Task<ActionResult<IEnumerable<Role>>> GetRolesByDepartment(Guid id)
+        public async Task<ActionResult<IEnumerable<Role>>> GetRolesByDepartment(Guid departmentId)
         {
             if (_dbContext.Roles == null)
             {
                 return NotFound(new { message = "Contexto de banco dados inválido!" });
             }
 
-            if (String.IsNullOrEmpty(id.ToString()))
+            if (String.IsNullOrEmpty(departmentId.ToString()))
             {
                 return StatusCode(400, "Informe dos dados corretamente!");
             }
 
             try
             {
-                var roleList = await _dbContext.Roles.Where(r => r.DepartamentId == id).ToListAsync();
+                var roleList = await _dbContext.Roles
+                    .Include(d => d.Department)
+                    .Where(r => r.DepartamentId == departmentId)
+                    .ToListAsync();
 
-                 return roleList;
+                return roleList;
                 
             }
             catch (Exception ex)

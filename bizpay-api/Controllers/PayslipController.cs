@@ -39,7 +39,12 @@ namespace bizpay_api.Controllers
 
                 if (employeeExists)
                 {
-                    var payslipList = await _dbContext.Payslips.Where(p => p.EmployeeCpf == cpf).ToListAsync();
+                    var payslipList = await _dbContext.Payslips
+                        .Include(e => e.Employee)
+                        .ThenInclude(c => c.Role)
+                        .ThenInclude(d => d.Department)
+                        .Where(p => p.EmployeeCpf == cpf)
+                        .ToListAsync();
 
                     if (payslipList.Any())
                     {
