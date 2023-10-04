@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using bizpay_api.Models;
 using bizpay_api.Shared;
+using Microsoft.AspNetCore.Identity;
 
 namespace bizpay_api.Repository
 {

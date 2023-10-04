@@ -81,6 +81,8 @@ namespace bizpay_api.Models
 
         public EmployeePermitions PermitionId { get; set; }
 
+        public string Permition { get; set; }
+
         public Guid RoleId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

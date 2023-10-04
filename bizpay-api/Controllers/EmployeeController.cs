@@ -9,6 +9,8 @@ using bizpay_api.Data;
 using System.Text.Json;
 using bizpay_api.Models;
 using bizpay_api.Repository;
+using Microsoft.AspNetCore.Authorization;
+using bizpay_api.Services;
 
 namespace bizpay_api.Controllers
 {
@@ -57,8 +59,10 @@ namespace bizpay_api.Controllers
         }
 
         // GET: api/employee/{cpf}
+
         [HttpGet]
         [Route("api/employee/{cpf}")]
+        [Authorize]
         public async Task<ActionResult<Employee>> GetEmployeeByCpf(string cpf)
         {
             if (_dbContext.Employees == null)

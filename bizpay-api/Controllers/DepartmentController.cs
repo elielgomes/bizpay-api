@@ -1,6 +1,7 @@
 ﻿using bizpay_api.Data;
 using bizpay_api.Models;
 using bizpay_api.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -15,14 +16,13 @@ namespace bizpay_api.Controllers
 
         public DepartmentController(APIDbContext dbContext)
         {
-
             _dbContext = dbContext;
-
         }
 
         // GET: api/department
         [HttpGet]
         [Route("/api/department")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Department>>> GetAllDepartments()
         {
             if (_dbContext.Departments == null)
