@@ -26,8 +26,8 @@ namespace bizpay_api.Services
                 throw new DataValidationException("RG não pode estar em branco");
 
             rg = rg.Replace(".", "").Replace("-", ""); // Remove pontos e traços
-            if (rg.Length != 9)
-                throw new DataValidationException("RG deve conter 9 dígitos");
+            /*if (rg.Length != 9)
+                throw new DataValidationException("RG deve conter 9 dígitos");*/
 
             // Você pode adicionar mais validações específicas do RG aqui, se necessário
 

@@ -43,6 +43,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 // Inicialize Seeder
@@ -62,6 +64,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(builder => builder
+        .WithOrigins("https://localhost:3000", "http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();

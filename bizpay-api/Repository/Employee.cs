@@ -39,13 +39,9 @@ namespace bizpay_api.Repository
 
         public string Nationality { get; set;}
 
-        public string? Religion { get; set;}
-
         public MaritalStatus MaritalStatus { get; set; }
 
         public int NumberOfChildren { get; set; }
-
-        public string? PartnerName { get; set; }
 
         public string? BankName { get; set; }
 
@@ -84,16 +80,14 @@ namespace bizpay_api.Repository
                 MaritalStatus = MaritalStatus,
                 Nationality = Nationality,
                 NumberOfChildren = NumberOfChildren,
-                PartnerName = PartnerName,
-                Religion = Religion,
                 Rg = Rg,
                 PermitionId = PermitionId,
                 RoleId = RoleId,
                 BankName = BankName,
                 AccountNumber = AccountNumber,
                 AgencyNumber = AgencyNumber,
-                PixKey = PixKey
-               
+                PixKey = PixKey,
+                Status = Status,
             };
 
             return employeeDTO;
@@ -116,8 +110,6 @@ namespace bizpay_api.Repository
                 MaritalStatus = employeeDTO.MaritalStatus;
                 Nationality = employeeDTO.Nationality;
                 NumberOfChildren = employeeDTO.NumberOfChildren;
-                PartnerName = employeeDTO.PartnerName;
-                Religion = employeeDTO.Religion;
                 Rg = employeeDTO.Rg;
                 PermitionId = employeeDTO.PermitionId;
                 RoleId = employeeDTO.RoleId;
@@ -125,6 +117,7 @@ namespace bizpay_api.Repository
                 AccountNumber = employeeDTO.AccountNumber;
                 AgencyNumber = employeeDTO.AgencyNumber;
                 PixKey = employeeDTO.PixKey;
+                Status = employeeDTO.Status;
 
             return this;
         }

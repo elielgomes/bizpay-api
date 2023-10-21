@@ -22,7 +22,7 @@ namespace bizpay_api.Models
 
         public DateTime? TerminationDate { get; set; }
 
-        private Status Status => !TerminationDate.HasValue ? Status.Active : Status.Inactive;
+        public Status Status { get; set; } = Status.Active;
 
         [Required(ErrorMessage = "O campo Data de nascimento é obrigatório")]
         public DateTime DateOfBirth { get; set; }
@@ -63,13 +63,9 @@ namespace bizpay_api.Models
 
         public string Nationality { get; set; } = "Brasileiro";
 
-        public string? Religion { get; set; }
-
         public MaritalStatus MaritalStatus { get; set; }
 
         public int NumberOfChildren { get; set; } = 0;
-
-        public string? PartnerName { get; set; }
 
         public string? BankName { get; set; }
 
@@ -81,7 +77,7 @@ namespace bizpay_api.Models
 
         public EmployeePermitions PermitionId { get; set; }
 
-        public string Permition { get; set; }
+        public string? Permition => PermitionId == EmployeePermitions.User ? "User" : "Admin";
 
         public Guid RoleId { get; set; }
 

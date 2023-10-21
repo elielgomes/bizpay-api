@@ -3,6 +3,6 @@
     public enum EmployeePermitions
     {
         User = 1,
-        Admin,
+        Admin = 2,
     }
 }

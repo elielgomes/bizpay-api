@@ -43,8 +43,6 @@ namespace bizpay_api.Controllers
             {
                 return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
             }
-
-            return Ok();
         }
 
         // GET: api/role/{id}

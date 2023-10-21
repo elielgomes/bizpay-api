@@ -11,6 +11,8 @@ using bizpay_api.Models;
 using bizpay_api.Repository;
 using Microsoft.AspNetCore.Authorization;
 using bizpay_api.Services;
+using System.IdentityModel.Tokens.Jwt;
+using bizpay_api.Shared;
 
 namespace bizpay_api.Controllers
 {
@@ -82,7 +84,7 @@ namespace bizpay_api.Controllers
                     .Include(r => r.Role)
                     .ThenInclude(d => d.Department)
                     .FirstOrDefaultAsync(e => e.Cpf == cpf);
-                    
+
 
                 if (employee == null)
                 {
@@ -162,6 +164,13 @@ namespace bizpay_api.Controllers
 
                         Employee updatedEmployee = new Employee();
                         updatedEmployee.FromDTO(employee);
+                        if (employee.Status == Status.Inactive)
+                        {
+                            updatedEmployee.TerminationDate = GetBrasiliaTime.Time();
+                        } else
+                        {
+                            updatedEmployee.TerminationDate = null;
+                        }
                         _dbContext.Employees.Update(updatedEmployee);
                         await _dbContext.SaveChangesAsync();
                     }
@@ -183,6 +192,53 @@ namespace bizpay_api.Controllers
                 return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
             }
 
+        }
+
+        [HttpGet]
+        [Route("api/employee/token/{token}")]
+        public async Task<ActionResult<Employee>> GetEmployeeByToken(String token)
+        {
+            if (token == null)
+            {
+                return NotFound();
+            }
+
+            if (_dbContext.Employees == null)
+            {
+                return NotFound(new { message = "Contexto de banco dados inválido!" });
+            }
+
+            try
+            {
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenRead = tokenHandler.ReadJwtToken(token);
+                var claims = tokenRead.Claims;
+
+                string subClaimValue = claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value;
+                string permissionClaimValue = claims.FirstOrDefault(claim => claim.Type == "Permition")?.Value;
+
+                if (!string.IsNullOrEmpty(subClaimValue) && !string.IsNullOrEmpty(permissionClaimValue))
+                {
+                    var employee = await _dbContext.Employees.FirstOrDefaultAsync(e => e.Email == subClaimValue);
+
+                    if (employee == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return employee;
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized("Login falhou");
+            }
         }
 
         private bool EmployeeExists(string Cpf)
