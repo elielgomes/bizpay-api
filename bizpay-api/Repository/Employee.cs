@@ -19,11 +19,11 @@ namespace bizpay_api.Repository
 
         public string Email { get; set; }
 
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         public string CellNumber { get; set; }
 
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         public HumanSexCodes Sex { get; set; }
 

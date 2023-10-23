@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bizpay_api.Data;
 
@@ -10,9 +11,11 @@ using bizpay_api.Data;
 namespace bizpay_api.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    partial class APIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231022181623_alter table employee add optional fields")]
+    partial class altertableemployeeaddoptionalfields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

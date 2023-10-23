@@ -31,7 +31,7 @@ namespace bizpay_api.Models
         public string Email { get; set; }
 
         [StringLength(15, MinimumLength = 10, ErrorMessage = "O campo Telefone deve ter entre 10 e 11 caracteres")]
-        public string PhoneNumber {
+        public string? PhoneNumber {
             get { return _phoneNumber; }
             set { _phoneNumber = Format.FormatPhoneNumber(value); }
         }
@@ -44,7 +44,7 @@ namespace bizpay_api.Models
         }
 
         [Required(ErrorMessage = "O campo Endereço é obrigatório")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         public HumanSexCodes Sex { get; set; } = HumanSexCodes.NotKnown;
 
