@@ -7,8 +7,6 @@ namespace bizpay_api.Data
     {
         public APIDbContext(DbContextOptions<APIDbContext> options) : base(options) { }
 
-        public DbSet<Department> Departments { get; set; }
-
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<Permition> Permitions { get; set; }

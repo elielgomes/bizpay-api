@@ -41,7 +41,6 @@ namespace bizpay_api.Controllers
                 var employeeList = await _dbContext.Employees
                     .Include(p => p.Permition)
                     .Include(r => r.Role)
-                    .ThenInclude(d => d.Department)
                     .ToListAsync();
 
                 if (employeeList.Any())
@@ -82,7 +81,6 @@ namespace bizpay_api.Controllers
                 var employee = await _dbContext.Employees
                     .Include(p => p.Permition)
                     .Include(r => r.Role)
-                    .ThenInclude(d => d.Department)
                     .FirstOrDefaultAsync(e => e.Cpf == cpf);
 
 

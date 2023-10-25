@@ -42,7 +42,6 @@ namespace bizpay_api.Controllers
                     var payslipList = await _dbContext.Payslips
                         .Include(e => e.Employee)
                         .ThenInclude(c => c.Role)
-                        .ThenInclude(d => d.Department)
                         .Where(p => p.EmployeeCpf == cpf)
                         .ToListAsync();
 

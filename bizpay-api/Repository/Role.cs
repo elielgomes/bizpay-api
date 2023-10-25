@@ -13,17 +13,12 @@ namespace bizpay_api.Repository
 
         public decimal WeeklyWorkload { get; set; }
 
-        [ForeignKey(nameof(Department))]
-        public Guid DepartamentId { get; set; }
-
-        public Department Department { get; set; }
 
         public RoleDTO ToDTO()
         {
             var roleDTO = new RoleDTO
             {
                 Id = Id,
-                DepartamentId = DepartamentId,
                 WeeklyWorkload = WeeklyWorkload,
                 Name = Name
             };
@@ -36,7 +31,6 @@ namespace bizpay_api.Repository
             Id = roleDTO.Id;
             Name = roleDTO.Name;
             WeeklyWorkload = roleDTO.WeeklyWorkload;
-            DepartamentId = roleDTO.DepartamentId;
 
             return this;
         }

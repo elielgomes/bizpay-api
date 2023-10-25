@@ -6,9 +6,6 @@ namespace bizpay_api.Data
 {
     public static class Seeder
     {
-        public static Department DepartmentMarketing { get; set; }
-        public static Department DepartmentTech { get; set; }
-        public static Department DepartmentAccounting { get; set; }
 
         public static Role RoleAccontingManager { get; set; }
         public static Role RoleDeveloper { get; set; }
@@ -29,38 +26,6 @@ namespace bizpay_api.Data
 
         public static void SeedData(APIDbContext dbContext)
         {
-            #region "DEPARTMENT"
-            // CREATE DEPARTMENT
-            if (!dbContext.Departments.Any())
-            {
-                DepartmentMarketing = new Department
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Marketing Digital"
-                };
-
-                DepartmentTech = new Department
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Desenvolvimento de software"
-                };
-
-                DepartmentAccounting = new Department
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Contabilidade"
-                };
-
-                dbContext.Departments.AddRange(DepartmentMarketing, DepartmentTech, DepartmentAccounting);
-                dbContext.SaveChanges();
-            }
-            else
-            {
-                DepartmentMarketing = dbContext.Departments.Single(d => d.Name == "Marketing Digital");
-                DepartmentTech = dbContext.Departments.Single(d => d.Name == "Desenvolvimento de software");
-                DepartmentAccounting = dbContext.Departments.Single(d => d.Name == "Contabilidade");
-            }
-            #endregion
 
             #region "ROLE"
             // CREATE ROLE
@@ -72,7 +37,6 @@ namespace bizpay_api.Data
                     Id = Guid.NewGuid(),
                     Name = "Gestor de contabilidade",
                     WeeklyWorkload = 40,
-                    DepartamentId = DepartmentAccounting.Id,
                 };
 
                 RoleDeveloper = new Role
@@ -80,7 +44,6 @@ namespace bizpay_api.Data
                     Id = Guid.NewGuid(),
                     Name = "Desenvolvedor de software",
                     WeeklyWorkload = 40,
-                    DepartamentId = DepartmentTech.Id,
                 };
 
                 RoleEngineer = new Role
@@ -88,7 +51,6 @@ namespace bizpay_api.Data
                     Id = Guid.NewGuid(),
                     Name = "Engenheiro de software",
                     WeeklyWorkload = 40,
-                    DepartamentId = DepartmentMarketing.Id,
                 };
 
                 RoleSEOSpecialist = new Role
@@ -96,14 +58,12 @@ namespace bizpay_api.Data
                     Id = Guid.NewGuid(),
                     Name = "Especialista em SEO",
                     WeeklyWorkload = 40,
-                    DepartamentId = DepartmentMarketing.Id,
                 };
 
                 RoleSocialMediaAnalyst = new Role
                 {
                     Id = Guid.NewGuid(),
                     Name = "Analista de Mídias Sociais",
-                    DepartamentId = DepartmentMarketing.Id,
                 };
 
                 dbContext.Roles.AddRange(
