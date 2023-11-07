@@ -60,7 +60,7 @@ namespace bizpay_api.Models
             set { _rg = Format.FormatRG(value); }
         }
 
-        public string Nationality { get; set; } = "Brasileiro";
+        public string Nationality { get; set; } = "Brasileira(o)";
 
         public MaritalStatus MaritalStatus { get; set; }
 

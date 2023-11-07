@@ -63,7 +63,7 @@ namespace bizpay_api.Controllers
 
         [HttpGet]
         [Route("api/employee/{cpf}")]
-        [Authorize]
+        /*[Authorize]*/
         public async Task<ActionResult<Employee>> GetEmployeeByCpf(string cpf)
         {
             if (_dbContext.Employees == null)
@@ -218,9 +218,12 @@ namespace bizpay_api.Controllers
 
                 if (!string.IsNullOrEmpty(subClaimValue) && !string.IsNullOrEmpty(permissionClaimValue))
                 {
-                    var employee = await _dbContext.Employees.FirstOrDefaultAsync(e => e.Email == subClaimValue);
+                    var employee = await _dbContext.Employees
+                    .Include(p => p.Permition)
+					.Include(r => r.Role)
+                    .FirstOrDefaultAsync(e => e.Email == subClaimValue);
 
-                    if (employee == null)
+					if (employee == null)
                     {
                         return NotFound();
                     }

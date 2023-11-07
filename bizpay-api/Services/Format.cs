@@ -26,12 +26,12 @@ namespace bizpay_api.Services
                 throw new DataValidationException("RG não pode estar em branco");
 
             rg = rg.Replace(".", "").Replace("-", ""); // Remove pontos e traços
-            /*if (rg.Length != 9)
-                throw new DataValidationException("RG deve conter 9 dígitos");*/
+            if (rg.Length != 9)
+                throw new DataValidationException("RG deve conter 9 dígitos");
 
             // Você pode adicionar mais validações específicas do RG aqui, se necessário
 
-            return $"{rg.Substring(0, 2)}.{rg.Substring(2, 3)}.{rg.Substring(5, 3)}";
+            return $"{rg.Substring(0, 2)}.{rg.Substring(2, 3)}.{rg.Substring(5, 3)}-{rg.Substring(8)}";
         }
 
         public static string FormatPhoneNumber(string phoneNumber)

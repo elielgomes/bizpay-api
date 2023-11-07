@@ -44,15 +44,9 @@ namespace bizpay_api.Controllers
                         .ThenInclude(c => c.Role)
                         .Where(p => p.EmployeeCpf == cpf)
                         .ToListAsync();
-
-                    if (payslipList.Any())
-                    {
-                        return payslipList;
-                    }
-                    else
-                    {
-                        return StatusCode(404, "Lista de holerites vazia!");
-                    }
+                    
+                    return payslipList;
+                  
                 }
                 else
                 {
@@ -72,35 +66,49 @@ namespace bizpay_api.Controllers
         [Route("api/payslip/id/{id}")]
         public async Task<ActionResult<Payslip>> GetPayslipById(Guid id)
         {
-            if (_dbContext.Payslips == null)
-            {
-                return NotFound(new { message = "Contexto de banco dados inválido!" });
-            };
+			if (_dbContext.Payslips == null)
+			{
+				return NotFound(new { message = "Contexto de banco dados inválido!" });
+			};
 
-            if (String.IsNullOrEmpty(id.ToString()))
-            {
-                return StatusCode(400, "Informe dos dados corretamente!");
-            }
+			if (String.IsNullOrEmpty(id.ToString()))
+			{
+				return StatusCode(400, "Informe dos dados corretamente!");
+			}
 
-            try
-            {
-                var payslip = await _dbContext.Payslips.FindAsync(id);
+			try
+			{
+				var payslipExists = (_dbContext.Payslips?.Any(e => e.Id == id)).GetValueOrDefault();
 
-                if (payslip != null)
-                {
-                    return payslip;
-                }
-                else
-                {
-                    return NotFound(new { message = "Holerite não encontrado!" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+				if (payslipExists)
+				{
+					var payslipList = await _dbContext.Payslips
+						.Include(e => e.Employee)
+						.ThenInclude(c => c.Role)
+						.Where(p => p.Id == id)
+						.FirstOrDefaultAsync();
 
-            }
-        }
+					if (payslipList != null)
+					{
+						return payslipList;
+					}
+					else
+					{
+						return NotFound("Holerite não encontrado!");
+					}
+				}
+				else
+				{
+					return NotFound("Holerite não encontrado!");
+				}
+
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+
+			}
+		}
 
         // POST: api/payslip
         [HttpPost]
