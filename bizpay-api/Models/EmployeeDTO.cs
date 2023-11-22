@@ -51,8 +51,6 @@ namespace bizpay_api.Models
         [StringLength(20, MinimumLength = 8, ErrorMessage = "O campo Senha deve ter entre 8 e 20 caracteres")]
         public string Password { get; set; }
 
-        public decimal HourlyPayment { get; set; }
-
         public DateTime AdmissionDate { get; set; } = GetBrasiliaTime.Time();
 
         public string Rg {
@@ -91,11 +89,6 @@ namespace bizpay_api.Models
             if (!Genres.Contains(Sex))
             {
                 result.Add(new ValidationResult(errorMessage: "O sexo informado é inválido!", memberNames: new [] { nameof(Sex) }));
-            }
-
-            if (HourlyPayment <= 0)
-            {
-                result.Add(new ValidationResult(errorMessage: "O valor do pagamento hora deve ser maior que 0!", memberNames: new[] { nameof(HourlyPayment) }));
             }
 
             if (!EmployeeStatus.Contains(Status))

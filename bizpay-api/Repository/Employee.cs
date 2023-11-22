@@ -29,8 +29,6 @@ namespace bizpay_api.Repository
 
         public string Password { get; set; }
 
-        public decimal HourlyPayment { get; set; }
-
         public DateTime AdmissionDate { get; set; }
 
         public DateTime? TerminationDate { get; set; }
@@ -73,7 +71,6 @@ namespace bizpay_api.Repository
                 CellNumber = CellNumber,
                 Address = Address,
                 Sex = Sex,
-                HourlyPayment = HourlyPayment,
                 AdmissionDate = AdmissionDate,
                 TerminationDate = TerminationDate,
                 Password = Password,
@@ -103,7 +100,6 @@ namespace bizpay_api.Repository
                 CellNumber = employeeDTO.CellNumber;
                 Address = employeeDTO.Address;
                 Sex = employeeDTO.Sex;
-                HourlyPayment = employeeDTO.HourlyPayment;
                 AdmissionDate = employeeDTO.AdmissionDate;
                 TerminationDate = employeeDTO.TerminationDate;
                 Password = employeeDTO.Password;
