@@ -39,29 +39,36 @@ namespace bizpay_api.Repository
         {
 
             decimal aliquot;
+            decimal deduction;
 
             if (value >= 0 && value <= 2112m)
             {
                 aliquot = 0m;
+                deduction = 0m;
             }
             else if (value >= 2112.01m && value <= 2826.65m)
             {
                 aliquot = 7.5m;
+                deduction = 158.40m;
+
             }
             else if (value >= 2826.66m && value <= 3751.05m)
             {
                 aliquot = 15m;
+                deduction = 370.40m;
             }
             else if (value >= 3751.06m && value <= 4664.68m)
             {
                 aliquot = 22.5m;
+                deduction = 651.73m;
             }
             else
             {
                 aliquot = 27.5m;
+                deduction = 884.96m;
             }
 
-            var discountIRRF = value * (aliquot / 100);
+            var discountIRRF = (value * (aliquot / 100)) - (deduction);
             Irrf = discountIRRF;
 
             var salaryDeductedIRRF = value - discountIRRF;
